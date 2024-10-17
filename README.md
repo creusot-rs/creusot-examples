@@ -5,6 +5,7 @@
 - write (in this file) a list of the examples with a short explanation of what they do and the features/verification patterns they demonstrate
 - better categories? tag system with an index?
 - make a pass over the examples, document/cleanup, make sure they are idiomatic and pedagogical.
+- make the proofs pass with auto2/auto3/why3find/sessions committed in the repository? 
 - add more examples/import from the Creusot testsuite
   + examples about iterators (using them, implementing them)
   + something about slices?
