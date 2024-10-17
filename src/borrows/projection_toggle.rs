@@ -1,4 +1,3 @@
-extern crate creusot_contracts;
 use creusot_contracts::*;
 
 #[ensures(if toggle { result == a && ^b == *b } else { result == b && ^a == *a })]

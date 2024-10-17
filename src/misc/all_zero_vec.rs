@@ -1,5 +1,3 @@
-extern crate creusot_contracts;
-
 use creusot_contracts::{logic::Int, *};
 
 #[ensures(forall<i : Int> 0 <= i && i < (^v)@.len() ==> (^v)[i] == 0u32)]

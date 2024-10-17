@@ -11,7 +11,6 @@
 // show that the array is not accessed outside its bound: the proof
 // requires to reason about permutation,
 
-extern crate creusot_contracts;
 use creusot_contracts::{
     invariant::{inv, Invariant},
     logic::{Int, Seq},

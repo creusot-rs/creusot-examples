@@ -24,7 +24,6 @@
 // policy, and its supports in Creusot, this separation comes here for
 // free.
 
-extern crate creusot_contracts;
 use creusot_contracts::{
     logic::{Int, Seq},
     vec, *,

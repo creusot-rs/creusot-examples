@@ -1,5 +1,3 @@
-extern crate creusot_contracts;
-
 use creusot_contracts::*;
 
 #[ensures(x <= 100u32 ==> result == 91u32 &&

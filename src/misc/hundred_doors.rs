@@ -12,7 +12,6 @@
 //! +   Absence of integer overflows
 //! +   Absence of array access out of bounds
 
-extern crate creusot_contracts;
 use creusot_contracts::{vec, *};
 
 pub fn f() {

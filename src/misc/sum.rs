@@ -1,4 +1,3 @@
-extern crate creusot_contracts;
 use creusot_contracts::*;
 
 #[requires(n@ < 1000)]
