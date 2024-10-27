@@ -48,8 +48,8 @@ impl<K: DeepModel, V> Tree<K, V> {
     #[logic]
     fn model_acc(
         self,
-        accu: <Self as ShallowModel>::ShallowModelTy,
-    ) -> <Self as ShallowModel>::ShallowModelTy {
+        accu: <Self as View>::ViewTy,
+    ) -> <Self as View>::ViewTy {
         pearlite! {
             match self {
                 Tree { node: None } => accu,
@@ -67,7 +67,7 @@ impl<K: DeepModel, V> Tree<K, V> {
               exists<v: V> self.model_acc(accu).get(k) == Some(v) && self.has_mapping(k, v))]
     fn model_acc_has_mapping(
         self,
-        accu: <Self as ShallowModel>::ShallowModelTy,
+        accu: <Self as View>::ViewTy,
         k: K::DeepModelTy,
     ) {
         pearlite! {
@@ -86,7 +86,7 @@ impl<K: DeepModel, V> Tree<K, V> {
     #[logic]
     #[requires(self.bst_invariant())]
     #[ensures(forall<v: V> self.has_mapping(k, v) ==> self.model_acc(accu).get(k) == Some(v))]
-    fn has_mapping_model_acc(self, accu: <Self as ShallowModel>::ShallowModelTy, k: K::DeepModelTy)
+    fn has_mapping_model_acc(self, accu: <Self as View>::ViewTy, k: K::DeepModelTy)
     where
         K::DeepModelTy: OrdLogic,
     {
@@ -152,24 +152,24 @@ impl<K: DeepModel, V> Node<K, V> {
     }
 }
 
-impl<K: DeepModel, V> ShallowModel for Node<K, V> {
-    type ShallowModelTy = Mapping<K::DeepModelTy, Option<V>>;
+impl<K: DeepModel, V> View for Node<K, V> {
+    type ViewTy = Mapping<K::DeepModelTy, Option<V>>;
 
     #[logic]
     #[open(self)]
-    fn shallow_model(self) -> Self::ShallowModelTy {
+    fn view(self) -> Self::ViewTy {
         pearlite! {
-            self.right.model_acc(self.left.shallow_model().set(self.key.deep_model(), Some(self.val)))
+            self.right.model_acc(self.left.view().set(self.key.deep_model(), Some(self.val)))
         }
     }
 }
 
-impl<K: DeepModel, V> ShallowModel for Tree<K, V> {
-    type ShallowModelTy = Mapping<K::DeepModelTy, Option<V>>;
+impl<K: DeepModel, V> View for Tree<K, V> {
+    type ViewTy = Mapping<K::DeepModelTy, Option<V>>;
 
     #[logic]
     #[open(self)]
-    fn shallow_model(self) -> Self::ShallowModelTy {
+    fn view(self) -> Self::ViewTy {
         pearlite! { self.model_acc(Mapping::cst(None)) }
     }
 }
@@ -755,12 +755,12 @@ where
 
 pub struct Map<K, V>(Tree<K, V>);
 
-impl<K: DeepModel, V> ShallowModel for Map<K, V> {
-    type ShallowModelTy = Mapping<K::DeepModelTy, Option<V>>;
+impl<K: DeepModel, V> View for Map<K, V> {
+    type ViewTy = Mapping<K::DeepModelTy, Option<V>>;
 
     #[logic]
     #[open(self)]
-    fn shallow_model(self) -> Self::ShallowModelTy {
+    fn view(self) -> Self::ViewTy {
         pearlite! { self.0@ }
     }
 }
