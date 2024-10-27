@@ -10,3 +10,4 @@ pub mod take_first_mut;
 pub mod filter_positive;
 pub mod ite_normalize;
 pub mod hillel;
+pub mod memcpy;
