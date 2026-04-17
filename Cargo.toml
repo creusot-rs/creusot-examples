@@ -1,11 +1,10 @@
-[package]
-name = "creusot-examples"
-version = "0.1.0"
-edition = "2021"
+[workspace]
+resolver = "2"
+members = [
+  "creusot-examples",
+  "verify-this-2025",
+  "verify-this-2026",
+]
 
-[dependencies]
-creusot-contracts = { path = "/home/armael/recherche/creusot/creusot-contracts" }
-
-# XXX is this necessary?
-[lints.rust]
-unexpected_cfgs = { level = "warn", check-cfg = ['cfg(creusot)'] }
+[workspace.dependencies]
+creusot-std = { version = "0.11.0-dev", path = "../creusot/creusot-std" }

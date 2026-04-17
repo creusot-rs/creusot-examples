@@ -9,13 +9,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c08606f8c3cbf4ce6ec8e28fb0014a2c086708fe954eaa885384a6165172e7e8"
 
 [[package]]
-name = "creusot-examples"
-version = "0.1.0"
-dependencies = [
- "creusot-std",
-]
-
-[[package]]
 name = "creusot-std"
 version = "0.11.0-dev"
 dependencies = [
@@ -82,9 +75,9 @@ dependencies = [
 
 [[package]]
 name = "quote"
-version = "1.0.45"
+version = "1.0.44"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "41f2619966050689382d2b44f664f4bc593e129785a36d6ee376ddf37259b924"
+checksum = "21b2ebcf727b7760c461f091f9f0f539b77b8e87f2fd88131e7f1b433b3cece4"
 dependencies = [
  "proc-macro2",
 ]
@@ -107,14 +100,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e6e4313cd5fcd3dad5cafa179702e2b244f760991f45397d14d4ebf38247da75"
 
 [[package]]
-name = "verify-this-2025"
-version = "0.1.0"
-dependencies = [
- "creusot-std",
-]
-
-[[package]]
-name = "verify-this-2026"
+name = "verify-this"
 version = "0.1.0"
 dependencies = [
  "creusot-std",
