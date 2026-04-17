@@ -1,3 +1,14 @@
+// Challenge 2 of VerifyThis 2026: Particle simulation
+//
+// https://verifythis.github.io/onsite/archive/2026/challenge2.pdf
+//
+// Completed:
+// - Safety (memory safety, data-race freedom)
+//
+// To do:
+// - Termination (missing features to specify the termination of `next` and `spawn`)
+// - Correctness
+
 use creusot_std::{
     ghost::{
         invariant::{AtomicInvariantSC, Protocol, declare_namespace},

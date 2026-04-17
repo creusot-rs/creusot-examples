@@ -1,3 +1,15 @@
+// Challenge 1 of VerifyThis 2026: Ada and her papers
+//
+// https://verifythis.github.io/onsite/archive/2026/challenge1.pdf
+//
+// Completed (all main tasks):
+// - Safety and correctness of `compute`, `compute_opt`, `update`
+//
+// To do (bonus tasks):
+// - Complexity
+// - Variant with non-sorted input
+// - Update `k` times
+
 use creusot_std::prelude::*;
 
 #[logic(open, inline)]

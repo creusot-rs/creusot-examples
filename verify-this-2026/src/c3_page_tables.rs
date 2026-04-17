@@ -1,3 +1,12 @@
+// Challenge 3 of VerifyThis 2026: Multi-level page tables
+//
+// https://verifythis.github.io/onsite/archive/2026/challenge3.pdf
+//
+// Completed (Q1 of 5):
+// - Machine invariant
+// - Safety and correctness of translation (wrt. to a Pearlite implementation)
+// - Injectivity of translation
+
 use creusot_std::{logic::FMap, prelude::*};
 
 pub struct Mem([u8; 2usize.pow(32)]);
