@@ -4,9 +4,11 @@
 
 In [`creusot-examples`](./creusot-examples)
 
-## VerifyThis 2026
+## [VerifyThis 2026](https://verifythis.github.io/onsite/)
 
-In [`verify-this-2026`](./verify-this-2026/). Team *The Steelmakers* (Jacques-Henri Jourdan, Li-yao Xia), won *Best Overall Team* award.
+Team *The Steelmakers* (Jacques-Henri Jourdan, Li-yao Xia) won *Best Overall Team* award!
+
+In [`verify-this-2026`](./verify-this-2026/).
 
 - [Challenge 1](./verify-this-2026/src/c1_hindex.rs): *Ada and her papers*. Algorithms to compute the h-index.
 
@@ -14,9 +16,13 @@ In [`verify-this-2026`](./verify-this-2026/). Team *The Steelmakers* (Jacques-He
 
 - [Challenge 3](./verify-this-2026/src/c3_page_tables.rs): *Multi-level page tables*.
 
-## VerifyThis 2025
+## [VerifyThis 2025](https://verifythis.github.io/onsite/archive/2025/)
 
 In [`verify-this-2025`](./verify-this-2025/). Solutions written as a warm up to the 2026 edition.
+
+- [Challenge 1](./verify-this-2025/src/c1_minimum_excludant.rs): *Minimum excludant*.
+
+- [Challenge 2](./verify-this-2025/src/c2_torvalds_linked_list.rs): *Linus Torvalds' elegant linked-list removal*.
 
 <!-- TODO
 - write (in this file) a list of the examples with a short explanation of what they do and the features/verification patterns they demonstrate
