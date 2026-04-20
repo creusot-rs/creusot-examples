@@ -313,9 +313,7 @@ impl<K: DeepModel, V> Tree<K, V> {
     fn height_invariant(self) -> bool {
         match self {
             Tree { node: None } => true,
-            Tree {
-                node: Some(node),
-            } => {
+            Tree { node: Some(node) } => {
                 let Node { left, right, .. } = *node;
                 node.height_invariant_here() && left.height_invariant() && right.height_invariant()
             }

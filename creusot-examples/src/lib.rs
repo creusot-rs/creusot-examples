@@ -1,10 +1,7 @@
 // disable "unused ..." warnings when not using creusot, for things that are
 // used in specifications, which are erased when not running creusot
 // XXX could we do better?
-#![cfg_attr(
-    not(creusot),
-    allow(unused_variables)
-)]
+#![cfg_attr(not(creusot), allow(unused_variables))]
 
 pub mod binary_search;
 pub mod borrows;

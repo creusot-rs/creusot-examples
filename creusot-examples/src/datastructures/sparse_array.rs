@@ -11,9 +11,9 @@
 // show that the array is not accessed outside its bound: the proof
 // requires to reason about permutation,
 
-#[cfg(creusot)]
-use creusot_std::resolve::structural_resolve;
 use creusot_std::prelude::*;
+#[cfg(creusot)]
+use creusot_std::{logic::FSet, resolve::structural_resolve};
 
 /* The sparse array data structure
  */
