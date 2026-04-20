@@ -1,4 +1,5 @@
 name: Nightly
+# Note: this job only checks out the dev branch! (see `ref: dev`)
 on:
   schedule:
     - cron: '0 2 * * *'
@@ -9,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: dev
 
       - uses: ocaml/setup-ocaml@v3
         with:
@@ -40,6 +43,11 @@ jobs:
         run: |
           cd ../creusot
           ./INSTALL
+
+      - name: Patch Cargo config for nightly
+        run: |
+          mkdir .cargo
+          echo -e '[patch.crates-io]\ncreusot-std = { path = "../creusot/creusot-std" }' > .cargo/config.toml
 
       - name: Run Creusot
         run: cargo creusot prove
