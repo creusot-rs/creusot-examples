@@ -12,7 +12,10 @@ type Node<T> = Box<(T, List<T>)>;
 pub fn rev_append<T>(n: List<T>, o: List<T>) -> List<T> {
     match n {
         Nil => o,
-        Cons(box (hd, tl)) => rev_append(tl, Cons(Box::new((hd, o)))),
+        Cons(node) => {
+            let (hd, tl) = *node;
+            rev_append(tl, Cons(Box::new((hd, o))))
+        }
     }
 }
 

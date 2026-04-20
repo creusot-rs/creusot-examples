@@ -13,7 +13,7 @@
 
 #[cfg(creusot)]
 use creusot_std::resolve::structural_resolve;
-use creusot_std::{logic::FSet, prelude::*};
+use creusot_std::prelude::*;
 
 /* The sparse array data structure
  */
@@ -181,6 +181,7 @@ pub fn create<T: Copy, const SIZE: usize>(dummy: T) -> Sparse<T, SIZE> {
 
 /* A test program
  */
+#[allow(unused_assignments)]
 pub fn f() {
     let default = 0;
     let mut a = create::<_, 10>(default);

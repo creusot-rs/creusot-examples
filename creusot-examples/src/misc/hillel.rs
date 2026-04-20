@@ -19,6 +19,7 @@ pub fn right_pad<T: Copy>(str: &mut Vec<T>, len: usize, pad: T) {
     }
 }
 
+#[allow(unused_assignments)] // snapshot c
 #[ensures((^str)@.len() >= len@ && (^str)@.len() >= str@.len())]
 #[ensures((^str)@.len() == len@ || (^str)@.len() == str@.len())]
 #[ensures(forall<i> 0 <= i && i < ((^str)@.len() - str@.len()) ==> (^str)[i] == pad)]
@@ -88,6 +89,7 @@ pub fn insert_unique<T: Eq + DeepModel>(vec: &mut Vec<T>, elem: T) {
     vec.push(elem);
 }
 
+#[allow(unused_assignments)] // snapshot sub_str
 #[ensures(is_unique(result.deep_model()))]
 #[ensures(is_subset(result.deep_model(), str.deep_model()))]
 #[ensures(is_subset(str.deep_model(), result.deep_model()))]

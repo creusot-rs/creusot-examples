@@ -1,6 +1,6 @@
 use ::std::cmp::Ordering::*;
 use creusot_std::{
-    invariant::{Invariant, inv},
+    invariant::Invariant,
     logic::Mapping,
     peano::PeanoInt,
     prelude::{Clone, PartialEq, *},
@@ -26,7 +26,7 @@ mod bumpalo {
 
 /* Axiomatization of a HashMap library */
 
-mod hashmap {
+pub mod hashmap {
     use creusot_std::{logic::Mapping, prelude::*};
 
     pub trait Hash: DeepModel {

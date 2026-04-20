@@ -4,6 +4,7 @@ pub enum List {
     Cons(u32, Box<List>),
     Nil,
 }
+#[cfg(creusot)]
 use List::*;
 
 impl List {

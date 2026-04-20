@@ -86,6 +86,7 @@ impl Memory {
         }
     }
 
+    #[allow(unused_assignments)] // snapshot n
     #[requires(self.list(l, *s))]
     #[ensures((^self).list(result, s.reverse()))]
     pub fn list_reversal_list(&mut self, mut l: Ptr, s: Snapshot<Seq<Ptr>>) -> Ptr {
@@ -110,6 +111,7 @@ impl Memory {
         }
     }
 
+    #[allow(unused_assignments)] // snapshot n
     #[requires(s.len() > 0)]
     #[requires(self.loop_(l, *s))]
     #[ensures((^self).loop_(result, s.subsequence(1, s.len()).reverse().push_front(s[0])))]
@@ -148,6 +150,7 @@ impl Memory {
         }
     }
 
+    #[allow(unused_assignments)] // snapshot n
     #[requires(self.lasso(l, *s1, *s2))]
     #[ensures((^self).lasso(result, *s1, s2.reverse()))]
     pub fn list_reversal_lasso(
