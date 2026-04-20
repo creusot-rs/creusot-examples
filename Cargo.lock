@@ -17,7 +17,9 @@ dependencies = [
 
 [[package]]
 name = "creusot-std"
-version = "0.11.0-dev"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0eeaaebdee9aa688b8ad786e721deaee4e2d15da3a043acf6fcb7efb4a4e226c"
 dependencies = [
  "creusot-std-proc",
  "num-rational",
@@ -25,7 +27,9 @@ dependencies = [
 
 [[package]]
 name = "creusot-std-proc"
-version = "0.11.0-dev"
+version = "0.11.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "bee44c269dbf2a9c3afc96f5983ec3b0cd7e7105218e4dadf62eb821bd20ca46"
 dependencies = [
  "proc-macro2",
  "quote",
