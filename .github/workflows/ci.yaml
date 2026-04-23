@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  CREUSOT_VERSION: v0.11.0
+  CREUSOT_VERSION: master
 
 jobs:
   rust:
@@ -62,4 +62,4 @@ jobs:
           ./INSTALL
 
       - name: Run Creusot
-        run: cargo creusot prove
+        run: cargo creusot
