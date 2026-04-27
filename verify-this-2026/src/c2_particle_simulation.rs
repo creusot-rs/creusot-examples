@@ -241,11 +241,15 @@ impl Protocol for SharedBagsInv {
     type Public = Seq<Bag>;
 
     #[logic(inline)]
-    fn protocol(self, s: Seq<Bag>) -> bool {
+    fn public(self) -> Self::Public {
         pearlite! {
-            self.next_shared_perm.len() == s.len() &&
-            forall<i> 0 <= i && i < s.len() ==> *self.next_shared_perm[i].ward() == s[i]
+            self.next_shared_perm.map(|p: Box<Perm<Bag>>| *p.ward())
         }
+    }
+
+    #[logic(inline)]
+    fn protocol(self) -> bool {
+        true
     }
 }
 
@@ -283,7 +287,6 @@ pub fn compute(mut cur: Vec<(Bag, Ghost<Box<Perm<Bag>>>)>, k: u32) {
             ghost!(SharedBagsInv {
                 next_shared_perm: next_shared_perm.into_inner()
             }),
-            snapshot!(next_shared@),
             snapshot!(BAGS()),
         );
 
