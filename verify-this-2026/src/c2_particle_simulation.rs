@@ -36,7 +36,9 @@ mod bag {
         type Value = FSet<i32>;
     }
 
+    #[trusted]
     impl SendPerm for Bag {}
+    #[trusted]
     impl SyncPerm for Bag {}
 
     #[opaque]
