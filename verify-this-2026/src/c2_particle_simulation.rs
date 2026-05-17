@@ -21,10 +21,7 @@ use std::thread::ScopedJoinHandle;
 
 mod bag {
     use creusot_std::{
-        ghost::{
-            Container, FnGhost,
-            perm::{Perm, SendPerm, SyncPerm},
-        },
+        ghost::{FnGhost, NotObjective, PermTarget, perm::Perm},
         logic::FSet,
         prelude::*,
     };
@@ -32,14 +29,10 @@ mod bag {
     #[opaque]
     pub struct Bag;
 
-    impl Container for Bag {
-        type Value = FSet<i32>;
+    impl PermTarget for Bag {
+        type Value<'a> = FSet<i32>;
+        type PermPayload = NotObjective;
     }
-
-    #[trusted]
-    impl SendPerm for Bag {}
-    #[trusted]
-    impl SyncPerm for Bag {}
 
     #[opaque]
     pub struct Committer;
@@ -77,8 +70,8 @@ mod bag {
         #[ensures((*self).hist_inv(^self))]
         #[ensures((^self).shot())]
         #[ensures((*own).ward() == (^own).ward())]
-        #[ensures(*(*own).val() == (*self).val_before())]
-        #[ensures(*(^own).val() == (*self).val_after())]
+        #[ensures((*own).val() == (*self).val_before())]
+        #[ensures((^own).val() == (*self).val_after())]
         #[check(ghost)]
         #[trusted]
         #[allow(unused_variables)]
@@ -90,15 +83,15 @@ mod bag {
     impl Bag {
         #[trusted]
         #[ensures(*result.1.ward() == result.0)]
-        #[ensures(*result.1.val() == FSet::empty())]
-        pub fn create() -> (Bag, Ghost<Box<Perm<Bag>>>) {
+        #[ensures(result.1.val() == FSet::empty())]
+        pub fn create() -> (Bag, Ghost<Perm<Bag>>) {
             todo!()
         }
 
         #[trusted]
         #[requires(perm.ward() == self)]
         #[ensures(perm.ward() == (^perm).ward())]
-        #[ensures(*(^perm).val() == perm.val().insert(x))]
+        #[ensures((^perm).val() == perm.val().insert(x))]
         pub fn nonatomic_push(&self, perm: Ghost<&mut Perm<Bag>>, x: i32) {
             let _ = (perm, x);
             todo!()
@@ -124,8 +117,8 @@ mod bag {
         #[trusted]
         #[requires(perm1.ward() == self && perm2.ward() == other)]
         #[ensures((^perm1).ward() == self && (^perm2).ward() == other)]
-        #[ensures(*(^perm1).val() == FSet::empty())]
-        #[ensures(*(^perm2).val() == (*perm2).val().union(*(*perm1).val()))]
+        #[ensures((^perm1).val() == FSet::empty())]
+        #[ensures((^perm2).val() == (*perm2).val().union((*perm1).val()))]
         pub fn transfer(
             &self,
             other: &Self,
@@ -138,7 +131,7 @@ mod bag {
 
         #[trusted]
         #[requires(perm.ward() == self)]
-        #[ensures(result@ == *perm.val())]
+        #[ensures(result@ == perm.val())]
         pub fn iter<'a>(&'a self, perm: Ghost<&'a Perm<Bag>>) -> BagIter<'a> {
             BagIter(self, perm)
         }
@@ -146,7 +139,7 @@ mod bag {
         #[trusted]
         #[requires(perm.ward() == self)]
         #[ensures((^perm).ward() == perm.ward())]
-        #[ensures(*(^perm).val() == FSet::empty())]
+        #[ensures((^perm).val() == FSet::empty())]
         pub fn clear(&self, perm: Ghost<&mut Perm<Bag>>) {
             let _ = perm;
             todo!()
@@ -227,7 +220,7 @@ pub fn f(i: usize, x: i32, n: usize) -> usize {
 }
 
 #[logic]
-pub fn valid_wards(s: Seq<(Bag, Ghost<Box<Perm<Bag>>>)>) -> bool {
+pub fn valid_wards(s: Seq<(Bag, Ghost<Perm<Bag>>)>) -> bool {
     pearlite! {
         forall<i> 0 <= i && i < s.len() ==> *s[i].1.ward() == s[i].0
     }
@@ -236,7 +229,7 @@ pub fn valid_wards(s: Seq<(Bag, Ghost<Box<Perm<Bag>>>)>) -> bool {
 declare_namespace! { BAGS }
 
 struct SharedBagsInv {
-    next_shared_perm: Seq<Box<Perm<Bag>>>,
+    next_shared_perm: Seq<Perm<Bag>>,
 }
 
 impl Protocol for SharedBagsInv {
@@ -245,7 +238,7 @@ impl Protocol for SharedBagsInv {
     #[logic(inline)]
     fn public(self) -> Self::Public {
         pearlite! {
-            self.next_shared_perm.map(|p: Box<Perm<Bag>>| *p.ward())
+            self.next_shared_perm.map(|p: Perm<Bag>| *p.ward())
         }
     }
 
@@ -257,13 +250,13 @@ impl Protocol for SharedBagsInv {
 
 #[requires(valid_wards(cur@))]
 #[requires(cur@.len() < usize::MAX@)]
-pub fn compute(mut cur: Vec<(Bag, Ghost<Box<Perm<Bag>>>)>, k: u32) {
+pub fn compute(mut cur: Vec<(Bag, Ghost<Perm<Bag>>)>, k: u32) {
     #[allow(unused)]
     let n = snapshot!(cur@.len());
 
     let mut next_private = vec![];
     let mut next_shared: Vec<Bag> = vec![];
-    let mut next_shared_perm: Ghost<Seq<Box<Perm<Bag>>>> = Seq::new();
+    let mut next_shared_perm: Ghost<Seq<Perm<Bag>>> = Seq::new();
 
     #[invariant(valid_wards(next_private@))]
     #[invariant(forall<i> 0 <= i && i < produced.len() ==> *next_shared_perm[i].ward() == next_shared@[i])]
@@ -323,7 +316,7 @@ pub fn compute(mut cur: Vec<(Bag, Ghost<Box<Perm<Bag>>>)>, k: u32) {
                                 x,
                                 ghost! { |c: &mut Committer| {
                                     inv.open(tokens.into_inner(), |inv: &mut SharedBagsInv| {
-                                        c.shoot(&mut *inv.next_shared_perm[*Int::new(j as i128)]);
+                                        c.shoot(&mut inv.next_shared_perm[*Int::new(j as i128)]);
                                     })
                                 }},
                             );
@@ -370,7 +363,7 @@ pub fn compute(mut cur: Vec<(Bag, Ghost<Box<Perm<Bag>>>)>, k: u32) {
                 proof_assert!(*c == cur0[produced.len() - 1]);
                 proof_assert!(*p == next_private0[produced.len() - 1]);
                 proof_assert!(*sh == next_shared[produced.len() - 1]);
-                let shp = ghost!(&mut **next_shared_perm.pop_front_ghost().unwrap());
+                let shp = ghost!(&mut *next_shared_perm.pop_front_ghost().unwrap());
 
                 let h = s.spawn(move |_| {
                     c.0.clear(ghost!(&mut c.1));
