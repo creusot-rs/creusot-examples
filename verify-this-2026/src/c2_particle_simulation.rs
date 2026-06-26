@@ -21,7 +21,7 @@ use std::thread::ScopedJoinHandle;
 
 mod bag {
     use creusot_std::{
-        ghost::{FnGhost, NotObjective, PermTarget, perm::Perm},
+        ghost::{FnGhost, NotObjective, Perm, perm::PermTarget},
         logic::FSet,
         prelude::*,
     };
