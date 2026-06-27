@@ -27,8 +27,7 @@ fn heap_frag_max<T: OrdLogic>(s: Seq<T>, i: Int, end: Int) {
 #[requires(end@ <= v@.len())]
 #[ensures(heap_frag((^v).deep_model(), start@, end@))]
 #[ensures((^v)@.permutation_of(v@))]
-#[ensures(forall<i: Int> 0 <= i && i < start@ || end@ <= i && i < v@.len()
-                      ==> v[i] == (^v)[i])]
+#[ensures(forall<i: Int> 0 <= i && i < start@ || end@ <= i && i < v@.len() ==> v[i] == (^v)[i])]
 #[ensures(forall<m: T::DeepModelTy>
           (forall<j: Int> start@ <= j && j < end@ ==> v.deep_model()[j] <= m) ==>
           forall<j: Int> start@ <= j && j < end@ ==> (^v).deep_model()[j] <= m)]
@@ -36,6 +35,7 @@ fn sift_down<T: Ord + DeepModel>(v: &mut Vec<T>, start: usize, end: usize)
 where
     T::DeepModelTy: OrdLogic,
 {
+    snapshot! { T::DeepModelTy::lt_log_total }; // FIXME: enable laws autoloading even for subtraits
     let old_v = snapshot! { v };
     let mut i = start;
 
