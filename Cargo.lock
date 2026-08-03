@@ -36,6 +36,8 @@ dependencies = [
 [[package]]
 name = "creusot-std"
 version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "68cc8f3ec44f553652fecb0b534726b2ca5d4684a54a593f0aedfe766b3e76fd"
 dependencies = [
  "creusot-std-proc",
 ]
@@ -43,6 +45,8 @@ dependencies = [
 [[package]]
 name = "creusot-std-proc"
 version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c9530985d4aff8273851f018c36422944f70717d7aa9e0c724c3deab004bd6db"
 dependencies = [
  "pearlite-syn",
  "proc-macro2",
@@ -189,6 +193,8 @@ checksum = "9f7c3e4beb33f85d45ae3e3a1792185706c8e16d043238c593331cc7cd313b50"
 [[package]]
 name = "pearlite-syn"
 version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0d109ea947aee5910cb3a17ec83e0f026e05934b12335b97d05d825320b4cb15"
 dependencies = [
  "proc-macro2",
  "quote",
