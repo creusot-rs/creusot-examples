@@ -7,4 +7,4 @@ members = [
 ]
 
 [workspace.dependencies]
-creusot-std = "0.13.0"
+creusot-std = "0.14.0-dev"
