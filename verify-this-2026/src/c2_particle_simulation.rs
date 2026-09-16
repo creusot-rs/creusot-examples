@@ -30,8 +30,8 @@ mod bag {
     pub struct Bag;
 
     impl PermTarget for Bag {
-        type Value<'a> = FSet<i32>;
-        type PermPayload = NotObjective;
+        type Value = FSet<i32>;
+        type Objectiveness = NotObjective;
     }
 
     #[opaque]
