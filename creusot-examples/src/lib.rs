@@ -10,4 +10,5 @@ pub mod knapsack;
 pub mod knuth_shuffle;
 pub mod lists;
 pub mod misc;
+pub mod mjrty;
 pub mod sorting;
