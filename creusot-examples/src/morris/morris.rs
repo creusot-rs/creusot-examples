@@ -156,7 +156,7 @@ impl<T> Tree<T> {
             root_idx: snapshot!(0),
             permissions: ghost! {
                 let mut p = Seq::new().into_inner();
-                p.push_back_ghost(root_perm.into_inner());
+                p.push_back(root_perm.into_inner());
                 p
             },
             children: snapshot!(Children {
@@ -171,7 +171,7 @@ impl<T> Tree<T> {
     }
 
     /// Merge two trees together, putting `value` in the middle.
-    #[ensures(result@ == self@.push_back(value).concat(other@))]
+    #[ensures(result@ == self@.snoc(value).concat(other@))]
     pub fn merge_with(self, value: T, other: Self) -> Self {
         let (root, root_perm) = Perm::new(Node {
             value,
@@ -181,10 +181,10 @@ impl<T> Tree<T> {
         let perms = snapshot!((self.permissions, root_perm, other.permissions));
         // program code ends here! Now for ghost code :)
         let (permissions, root_idx, children) = ghost! {
-            let self_len = self.permissions.len_ghost();
+            let self_len = self.permissions.len();
             let root_idx = self_len;
             let mut perms = self.permissions.into_inner();
-            perms.push_back_ghost(root_perm.into_inner());
+            perms.push_back(root_perm.into_inner());
             perms.extend(other.permissions.into_inner());
             let left_is_null = self.root.is_null();
             let right_is_null = other.root.is_null();
@@ -310,7 +310,7 @@ impl<T> Invariant for TreeIter<T> {
     result[i + 1] == s[i]
 )]
 fn push_front_indexed<T>(s: Seq<T>, item: T) -> Seq<T> {
-    s.push_front(item)
+    s.cons(item)
 }
 
 /// Alternative spec for `Seq::pop_front`, which seems easier for this proof.
@@ -323,7 +323,7 @@ fn push_front_indexed<T>(s: Seq<T>, item: T) -> Seq<T> {
     result[i] == s[i + 1]
 )]
 fn pop_front_indexed<T>(s: Seq<T>) -> Seq<T> {
-    s.pop_front()
+    s.tail()
 }
 
 impl<T> TreeIter<T> {

@@ -83,27 +83,27 @@ impl Invariant for Machine {
         pearlite! {
             inv(*self.table_lvl0) &&
             self.table_lvl0.encoded_in(self.mem, 0u32) &&
-            (forall<j, p> self.table_lvl0.get(j) == Some(p) ==> self.tables_lvl1.contains(p)) &&
+            (forall<j, p> self.table_lvl0.get(j) == Some(p) ==> self.tables_lvl1.contains(&p)) &&
 
             (forall<i, t>
-                self.tables_lvl1.get(i) == Some(t) ==>
+                self.tables_lvl1.lookup(i) == Some(t) ==>
                 inv(t) &&
                 1024u32 <= i && i < self.m_next && (i & 0x3FFu32 == 0u32) &&
                 t.encoded_in(self.mem, i) &&
-                (forall<j, p> t.get(j) == Some(p) ==> self.tables_lvl2.contains(p)) &&
+                (forall<j, p> t.get(j) == Some(p) ==> self.tables_lvl2.contains(&p)) &&
                 t.disjoint_from(*self.table_lvl0) &&
-                (forall<j, tt> i != j ==> self.tables_lvl1.get(j) == Some(tt) ==> tt.disjoint_from(t))
+                (forall<j, tt> i != j ==> self.tables_lvl1.lookup(j) == Some(tt) ==> tt.disjoint_from(t))
             ) &&
 
             (forall<i, t>
-                self.tables_lvl2.get(i) == Some(t) ==>
+                self.tables_lvl2.lookup(i) == Some(t) ==>
                 inv(t) &&
                 1024u32 <= i && i < self.m_next && (i & 0x3FFu32 == 0u32) &&
                 t.encoded_in(self.mem, i) &&
                 (forall<j, p> t.get(j) == Some(p) ==> p >= H_START)  &&
                 t.disjoint_from(*self.table_lvl0) &&
-                (forall<j, tt> self.tables_lvl1.get(j) == Some(tt) ==> tt.disjoint_from(t)) &&
-                (forall<j, tt> i != j ==> self.tables_lvl2.get(j) == Some(tt) ==> tt.disjoint_from(t)))
+                (forall<j, tt> self.tables_lvl1.lookup(j) == Some(tt) ==> tt.disjoint_from(t)) &&
+                (forall<j, tt> i != j ==> self.tables_lvl2.lookup(j) == Some(tt) ==> tt.disjoint_from(t)))
         }
     }
 }
@@ -211,18 +211,18 @@ impl Machine {
 
 
             match self.table_lvl0.get(k1) {
-                Some(t1) => match self.tables_lvl1.get(t1) {
+                Some(t1) => match self.tables_lvl1.lookup(t1) {
                     Some(st1) => match st1.get(i1) {
-                        Some(m1) => match self.tables_lvl2.get(m1) {
+                        Some(m1) => match self.tables_lvl2.lookup(m1) {
                             Some(sm1) => match sm1.get(j1) {
                                 Some(p1) => {
                                     proof_assert!(self.translate_log(vaddr1) == Some(p1 + o1));
                                     proof_assert!(inv(sm1));
                                     proof_assert!(p1 & 1023u32 == 0u32);
                                     match self.table_lvl0.get(k2) {
-                                        Some(t2) => match self.tables_lvl1.get(t2) {
+                                        Some(t2) => match self.tables_lvl1.lookup(t2) {
                                             Some(st2) => match st2.get(i2) {
-                                                Some(m2) => match self.tables_lvl2.get(m2) {
+                                                Some(m2) => match self.tables_lvl2.lookup(m2) {
                                                     Some(sm2) => match sm2.get(j2) {
                                                         Some(p2) => {
                                                             proof_assert!(self.translate_log(vaddr2) == Some(p2 + o2));

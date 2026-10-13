@@ -100,7 +100,7 @@ pub unsafe fn remove_better_verified(
         ==> (*_mut_perms[i]).ward() == (^_mut_perms[i]).ward()
         && (*_mut_perms[i]).val() == (^_mut_perms[i]).val())]
     while *p != toremove {
-        let p_perm = ghost! { &mut **mut_perms.pop_front_ghost().unwrap() };
+        let p_perm = ghost! { &mut **mut_perms.pop_front().unwrap() };
 
         p = &mut (unsafe { Perm::as_mut(*p as *mut Node, p_perm) }).next;
 
