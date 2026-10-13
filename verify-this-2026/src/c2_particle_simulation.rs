@@ -91,18 +91,18 @@ mod bag {
         #[trusted]
         #[requires(perm.ward() == self)]
         #[ensures(perm.ward() == (^perm).ward())]
-        #[ensures((^perm).val() == perm.val().insert(x))]
+        #[ensures((^perm).val() == perm.val().add(x))]
         pub fn nonatomic_push(&self, perm: Ghost<&mut Perm<Bag>>, x: i32) {
             let _ = (perm, x);
             todo!()
         }
 
         #[requires(forall<c: &mut Committer>
-             !c.shot() ==> c.ward() == *self ==> c.val_after() == c.val_before().insert(x) ==>
+             !c.shot() ==> c.ward() == *self ==> c.val_after() == c.val_before().add(x) ==>
              f.precondition((c,)) && (f.postcondition_once((c,), ()) ==> (^c).shot())
         )]
         #[ensures(exists<c: &mut Committer>
-             !c.shot() && c.ward() == *self && c.val_after() == c.val_before().insert(x) &&
+             !c.shot() && c.ward() == *self && c.val_after() == c.val_before().add(x) &&
              f.postcondition_once((c,), ())
          )]
         #[trusted]
@@ -175,8 +175,8 @@ mod bag {
         #[logic(prophetic, open)]
         fn produces(self, visited: Seq<Self::Item>, o: Self) -> bool {
             pearlite! {
-                (forall<x> self@.contains(x) == (o@.contains(x) || exists<j> 0 <= j && j < visited.len() && visited[j] == x)) &&
-                (forall<i> 0 <= i && i < visited.len() ==> !o@.contains(visited[i])) &&
+                (forall<x> self@.contains(&x) == (o@.contains(&x) || exists<j> 0 <= j && j < visited.len() && visited[j] == x)) &&
+                (forall<i> 0 <= i && i < visited.len() ==> !o@.contains(&visited[i])) &&
                 (forall<i, j> 0 <= i && i < j && j < visited.len() ==> visited[i] != visited[j])
             }
         }
@@ -267,7 +267,7 @@ pub fn compute(mut cur: Vec<(Bag, Ghost<Perm<Bag>>)>, k: u32) {
         next_private.push(Bag::create());
         let (sh, p) = Bag::create();
         next_shared.push(sh);
-        ghost! { next_shared_perm.push_back_ghost(p.into_inner()); };
+        ghost! { next_shared_perm.push_back(p.into_inner()); };
     }
 
     #[invariant(valid_wards(cur@))]
@@ -363,7 +363,7 @@ pub fn compute(mut cur: Vec<(Bag, Ghost<Perm<Bag>>)>, k: u32) {
                 proof_assert!(*c == cur0[produced.len() - 1]);
                 proof_assert!(*p == next_private0[produced.len() - 1]);
                 proof_assert!(*sh == next_shared[produced.len() - 1]);
-                let shp = ghost!(&mut *next_shared_perm.pop_front_ghost().unwrap());
+                let shp = ghost!(&mut *next_shared_perm.pop_front().unwrap());
 
                 let h = s.spawn(move |_| {
                     c.0.clear(ghost!(&mut c.1));
