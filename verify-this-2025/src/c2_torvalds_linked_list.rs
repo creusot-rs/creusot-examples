@@ -4,7 +4,7 @@
 
 #[cfg(creusot)]
 use creusot_std::logic::such_that;
-use creusot_std::{ghost::perm::Perm, prelude::*};
+use creusot_std::{ghost::perm::Perm, logic::Mapping, prelude::*};
 
 pub struct Node {
     next: *const Node,
@@ -68,6 +68,7 @@ pub unsafe fn remove_better_verified(
     l: &mut List,
     toremove: *const Node,
 ) -> Ghost<Box<Perm<*const Node>>> {
+    let _ = snapshot! { map_remove::<Box<Perm<*const Node>>, *const Node> };
     let _x =
         snapshot! { such_that(|x: Int| 0 <= x && x < l.len_logic() && toremove == l.elems()[x]) };
     let x_perm = ghost! { l.perms.remove(*_x.into_ghost()) };
@@ -118,3 +119,8 @@ pub unsafe fn remove_better_verified(
 
     x_perm
 }
+
+#[logic(opaque)]
+#[requires(0 <= i && i < s.len())]
+#[ensures(s.map(f).removed(i) == s.removed(i).map(f))]
+fn map_remove<A, B>(s: Seq<A>, f: Mapping<A, B>, i: Int) {}
