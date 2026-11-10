@@ -7,4 +7,4 @@ members = [
 ]
 
 [workspace.dependencies]
-creusot-std = { version = "0.15.0-dev", features = ["sc-drf"] }
+creusot-std = { version = "0.15.0", features = ["sc-drf"] }
