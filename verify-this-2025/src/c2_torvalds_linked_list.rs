@@ -3,8 +3,8 @@
 //! https://verifythis.github.io/onsite/archive/2025/
 
 #[cfg(creusot)]
-use creusot_std::logic::such_that;
-use creusot_std::{ghost::perm::Perm, logic::Mapping, prelude::*};
+use creusot_std::logic::{Mapping, such_that};
+use creusot_std::{ghost::perm::Perm, prelude::*};
 
 pub struct Node {
     next: *const Node,
